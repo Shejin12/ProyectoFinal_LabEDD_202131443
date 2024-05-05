@@ -1,0 +1,20 @@
+digraph G{
+AltaVerapaz -> SantaMaríadeJesús;
+SantaMaríadeJesús -> AltaVerapaz;
+Petén -> CiudadVieja;
+CiudadVieja -> Petén;
+Quetzaltenango -> Retalhuleu;
+Quetzaltenango -> SanMarcos;
+Quetzaltenango -> Retalhuleu;
+Retalhuleu -> Quetzaltenango;
+Retalhuleu -> Quetzaltenango;
+SanMarcos -> Quetzaltenango;
+SanMarcos -> SanBartoloméMilpasAltas;
+Suchitepequez -> Guatemala;
+Guatemala -> Suchitepequez;
+SanBartoloméMilpasAltas -> SanMarcos;
+Huehuetenango -> SanLucasSacatepéquez;
+SanLucasSacatepéquez -> Huehuetenango;
+Quiché -> SantaLucíaMilpasAltas;
+SantaLucíaMilpasAltas -> Quiché;
+}
