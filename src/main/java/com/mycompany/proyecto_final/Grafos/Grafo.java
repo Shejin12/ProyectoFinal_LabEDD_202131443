@@ -10,6 +10,10 @@ import java.util.Scanner;
 public class Grafo {
     LinkedList<Nodo> nodos = new LinkedList<>();
     LinkedList<Ruta> ruta;
+    private String rutaString = ""; 
+    private int distanciaTotal = 0;
+    private int tiempoTotal = 0;
+    private int gastoTotal = 0;
     
     
     
@@ -77,7 +81,7 @@ public class Grafo {
     
     private void graficar(){
         try {
-            ProcessBuilder procesoBuilder = new ProcessBuilder("dot", "-Tpng", "./Grafo.dot", "-o", "Grago.png"); 
+            ProcessBuilder procesoBuilder = new ProcessBuilder("dot", "-Tpng", "./Grafo.dot", "-o", "Grafo.png"); 
             procesoBuilder.inheritIO();
 
             Process proceso = procesoBuilder.start();
@@ -124,10 +128,10 @@ public class Grafo {
         String origen = scanner.nextLine();
         System.out.println("2");
         String destino = scanner.nextLine();
-        busquedaRuta(origen, destino);
+        busquedaRuta(origen, destino, false);
     }
     
-    public void busquedaRuta(String origen, String destino){
+    public void busquedaRuta(String origen, String destino, boolean caminar){
         
         Nodo start = findNodo(origen);
         if (start != null) {
@@ -136,7 +140,7 @@ public class Grafo {
             start.buscarNodo(destino, ruta, pasados);
         }
         for (Ruta nodo : ruta) {
-            nodo.imprimirRuta();
+            nodo.imprimirRuta(this, caminar);
         }
     }
     
@@ -148,6 +152,22 @@ public class Grafo {
         return nodos;
     }
     
+    public void colocarDatos(int dist, int tmp, int gas){
+        distanciaTotal = dist;
+        tiempoTotal = tmp;
+        gastoTotal = gas;
+    }
     
+    public int getDistancia(){
+        return distanciaTotal;
+    }
+    
+    public int getTiempo(){
+        return tiempoTotal;
+    }
+    
+    public int getGasto(){
+        return gastoTotal;
+    }
     
 }

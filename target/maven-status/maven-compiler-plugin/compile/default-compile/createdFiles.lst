@@ -1,6 +1,8 @@
 com\mycompany\proyecto_final\Proyecto_Final.class
 main\java\com\mycompany\proyecto_final\Estructura\Lectura_Archivos.class
 main\java\com\mycompany\proyecto_final\Grafos\Grafo.class
+main\java\com\mycompany\proyecto_final\Estructura\Mapa$2.class
+main\java\com\mycompany\proyecto_final\Estructura\Mapa$1.class
 main\java\com\mycompany\proyecto_final\Nodos\Nodo.class
-com\mycompany\proyecto_final\Estructura\Mapa.class
+main\java\com\mycompany\proyecto_final\Estructura\Mapa.class
 main\java\com\mycompany\proyecto_final\Grafos\Ruta.class

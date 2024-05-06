@@ -2,19 +2,28 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.mycompany.proyecto_final.Estructura;
+package main.java.com.mycompany.proyecto_final.Estructura;
 
+import java.awt.Graphics;
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import main.java.com.mycompany.proyecto_final.Grafos.Grafo;
 import main.java.com.mycompany.proyecto_final.Grafos.Ruta;
 import main.java.com.mycompany.proyecto_final.Nodos.Nodo;
 
-/**
- *
- * @author cheji
- */
 public class Mapa extends javax.swing.JFrame {
     private Grafo grafo;
+    private String destino, inicio;
+    private LinkedList<Nodo> lista;
     /**
      * Creates new form Mapa
      */
@@ -24,14 +33,54 @@ public class Mapa extends javax.swing.JFrame {
         llenarDatos();
     }
     
-    public void llenarDatos(){
-        LinkedList<Nodo> nodos = grafo.getNodos();
-        for (Nodo nodo : nodos) {
+    private void llenarDatos(){
+        lista = grafo.getNodos();
+        for (int i = 0; i < lista.size() - 1; i++) {
+            for (int j = 0; j < lista.size() - i - 1; j++) {
+                if (lista.get(j).getNombre().compareTo(lista.get(j + 1).getNombre()) > 0) {
+                    Nodo temp = lista.get(j);
+                    lista.set(j, lista.get(j+1));
+                    lista.set(j+1, temp);
+                }
+            }
+        }
+        
+        for (Nodo nodo : lista) {
             cmbStart.addItem(nodo.getNombre());
             cmbFinish.addItem(nodo.getNombre());
         }
     }
+    
+    private void stats(){
+        lblDistancia.setText(String.valueOf(grafo.getDistancia()));
+        lblTiempo.setText(String.valueOf(grafo.getTiempo()));
+        lblGasto.setText(String.valueOf(grafo.getGasto()));
+        if (cmbTransporte.getSelectedIndex() == 1) {
+            lblDatosGasto.setText("Gasolina");
+        } else {
+            lblDatosGasto.setText("Cansancio");
+        }
+    }
+    
+    public void colocarGrafo(){
+        Icon imagen = new ImageIcon("Grafo.png");
+        lblImagen.setIcon(imagen);
+    }
+    
+    public void colocarOtroGrafo(){
+        Icon imagen = new ImageIcon("download.png");
+        lblImagen.setIcon(imagen);
+    }
 
+    private void actualzarAdyacentes(){
+        Nodo start = grafo.findNodo(inicio);
+        if (start != null) {
+            LinkedList<Nodo> juntos = start.getAdyacentes();
+            for (Nodo junto : juntos) {
+                cmbSiguiente.addItem(junto.getNombre());
+            }
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -52,25 +101,27 @@ public class Mapa extends javax.swing.JFrame {
         cmbTransporte = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jPanel3 = new javax.swing.JPanel();
+        lblImagen = new javax.swing.JLabel();
         jSeparator3 = new javax.swing.JSeparator();
         jButton1 = new javax.swing.JButton();
         jSeparator4 = new javax.swing.JSeparator();
         jLabel4 = new javax.swing.JLabel();
         btnInicio = new javax.swing.JButton();
         jSeparator5 = new javax.swing.JSeparator();
-        jLabel5 = new javax.swing.JLabel();
+        lblActual = new javax.swing.JLabel();
         lblDatosGasto = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cmbSiguiente = new javax.swing.JComboBox<>();
         txtHora = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         lblGasto = new javax.swing.JLabel();
         lblDistancia = new javax.swing.JLabel();
         lblTiempo = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        btnSiguiente = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBounds(new java.awt.Rectangle(600, 400, 0, 0));
@@ -80,7 +131,7 @@ public class Mapa extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         jLabel1.setText("Hora:");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 290, 50, 20));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 350, 50, 20));
         jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 300, 10));
 
         cmbFinish.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
@@ -92,7 +143,7 @@ public class Mapa extends javax.swing.JFrame {
 
         cmbStart.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
         jPanel1.add(cmbStart, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 280, -1));
-        jPanel1.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 260, 300, 10));
+        jPanel1.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 300, 10));
 
         jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         jLabel3.setText("Destino");
@@ -102,8 +153,9 @@ public class Mapa extends javax.swing.JFrame {
         cmbTransporte.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Caminando", "Automóvil" }));
         jPanel1.add(cmbTransporte, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 150, 180, -1));
 
-        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jScrollPane1.setViewportView(jPanel3);
+        lblImagen.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblImagen.setOpaque(true);
+        jScrollPane1.setViewportView(lblImagen);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -127,6 +179,7 @@ public class Mapa extends javax.swing.JFrame {
 
         jButton1.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         jButton1.setText("Siguiente");
+        jButton1.setEnabled(false);
         jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 460, 90, -1));
         jPanel1.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 300, 10));
 
@@ -136,12 +189,16 @@ public class Mapa extends javax.swing.JFrame {
 
         btnInicio.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         btnInicio.setText("Iniciar Viaje");
+        btnInicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInicioActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 190, -1, -1));
         jPanel1.add(jSeparator5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 220, 300, 10));
 
-        jLabel5.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-        jLabel5.setText("Siguiente Paso");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 230, 80, 20));
+        lblActual.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+        jPanel1.add(lblActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 230, 160, 20));
 
         lblDatosGasto.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         jPanel1.add(lblDatosGasto, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 410, 90, 20));
@@ -150,12 +207,15 @@ public class Mapa extends javax.swing.JFrame {
         jLabel8.setText("Tiempo:");
         jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 370, 90, 20));
 
-        jComboBox1.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 230, 100, -1));
+        cmbSiguiente.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        cmbSiguiente.setMaximumRowCount(30);
+        cmbSiguiente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+        cmbSiguiente.setEnabled(false);
+        jPanel1.add(cmbSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 260, 100, -1));
 
         txtHora.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
-        jPanel1.add(txtHora, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 290, -1, -1));
+        txtHora.setText("-");
+        jPanel1.add(txtHora, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 370, -1, -1));
 
         jLabel9.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         jLabel9.setText("Distancia:");
@@ -173,6 +233,7 @@ public class Mapa extends javax.swing.JFrame {
         lblDistancia.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         lblDistancia.setForeground(new java.awt.Color(0, 102, 204));
         lblDistancia.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblDistancia.setText("Distancia");
         lblDistancia.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanel1.add(lblDistancia, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 330, 90, 20));
 
@@ -184,17 +245,33 @@ public class Mapa extends javax.swing.JFrame {
         lblTiempo.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanel1.add(lblTiempo, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 370, 90, 20));
 
-        jButton2.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-        jButton2.setText("Siguiente");
-        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(206, 230, 90, -1));
+        btnSiguiente.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+        btnSiguiente.setText("Siguiente");
+        btnSiguiente.setEnabled(false);
+        btnSiguiente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSiguienteActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 260, 90, -1));
 
         jButton3.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         jButton3.setText("Siguiente");
+        jButton3.setEnabled(false);
         jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 460, 90, -1));
 
         jButton4.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         jButton4.setText("Siguiente");
+        jButton4.setEnabled(false);
         jPanel1.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 460, 90, -1));
+
+        jLabel6.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+        jLabel6.setText("Siguiente Paso");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 260, 80, 20));
+
+        jLabel7.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+        jLabel7.setText("Estas en:");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 230, 80, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -210,6 +287,46 @@ public class Mapa extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed
+        inicio = cmbStart.getSelectedItem().toString();
+        destino = cmbFinish.getSelectedItem().toString();
+        boolean caminar;
+        if (cmbTransporte.getSelectedIndex() == 0) {
+            caminar = true;
+        } else {
+            caminar = false;
+        }
+        grafo.busquedaRuta(inicio, destino, caminar);
+        stats();
+        cmbSiguiente.setEnabled(true);
+        btnSiguiente.setEnabled(true);
+        lblActual.setText(inicio);
+        cmbFinish.setEnabled(false);
+        cmbStart.setEnabled(false);
+        cmbTransporte.setEnabled(false);
+        actualzarAdyacentes();
+    }//GEN-LAST:event_btnInicioActionPerformed
+
+    private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
+        inicio = cmbSiguiente.getSelectedItem().toString();
+        boolean caminar;
+        if (cmbTransporte.getSelectedIndex() == 0) {
+            caminar = true;
+        } else {
+            caminar = false;
+        }
+        grafo.busquedaRuta(inicio, destino, caminar);
+        lblActual.setText(inicio);
+        cmbSiguiente.removeAllItems();
+        stats();
+        actualzarAdyacentes();
+        System.out.println(inicio + "||" + destino);
+        if (inicio.equals(destino)) {
+            JOptionPane.showMessageDialog(null, "Llego");
+            btnSiguiente.setEnabled(false);
+        }
+    }//GEN-LAST:event_btnSiguienteActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -217,33 +334,35 @@ public class Mapa extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnInicio;
+    private javax.swing.JButton btnSiguiente;
     private javax.swing.JComboBox<String> cmbFinish;
+    private javax.swing.JComboBox<String> cmbSiguiente;
     private javax.swing.JComboBox<String> cmbStart;
     private javax.swing.JComboBox<String> cmbTransporte;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
+    private javax.swing.JLabel lblActual;
     private javax.swing.JLabel lblDatosGasto;
     private javax.swing.JLabel lblDistancia;
     private javax.swing.JLabel lblGasto;
+    private javax.swing.JLabel lblImagen;
     private javax.swing.JLabel lblTiempo;
     private javax.swing.JTextField txtHora;
     // End of variables declaration//GEN-END:variables

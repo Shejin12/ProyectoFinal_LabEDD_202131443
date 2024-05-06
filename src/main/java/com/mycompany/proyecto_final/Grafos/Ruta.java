@@ -36,19 +36,21 @@ public class Ruta {
         return false; 
     }
     
-    public void imprimirRuta(){
-        agregarDatosRuta();
-        System.out.println(rutaString);
-        System.out.println("distancia: " + distanciaTotal + "     tiempo: " + tiempoTotal + "     gasto: " + gastoTotal);
+    public void imprimirRuta(Grafo grafo, boolean caminar){
+        agregarDatosRuta(caminar);
+        grafo.colocarDatos(distanciaTotal, tiempoTotal, gastoTotal);
     }
     
-    private void agregarDatosRuta(){
+    private void agregarDatosRuta(boolean caminar){
         Nodo actual;
+        distanciaTotal = 0;
+        tiempoTotal = 0;
+        gastoTotal = 0;
         for (int i = 0; i < ruta.size()-1; i++) {
             actual = ruta.get(i);
             distanciaTotal += actual.getDistancia(ruta.get(i+1));
-            tiempoTotal += actual.getTiempo(ruta.get(i+1), false);
-            gastoTotal += actual.getDesgaste(ruta.get(i+1), false);
+            tiempoTotal += actual.getTiempo(ruta.get(i+1), caminar);
+            gastoTotal += actual.getDesgaste(ruta.get(i+1), caminar);
         }    
     }
     

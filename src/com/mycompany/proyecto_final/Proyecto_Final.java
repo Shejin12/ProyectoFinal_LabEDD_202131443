@@ -4,26 +4,24 @@
 
 package com.mycompany.proyecto_final;
 
-import com.mycompany.proyecto_final.Estructura.Mapa;
+import main.java.com.mycompany.proyecto_final.Estructura.Mapa;
 import main.java.com.mycompany.proyecto_final.Grafos.Grafo;
 import main.java.com.mycompany.proyecto_final.Estructura.Lectura_Archivos;
 
 
-/**
- *
- * @author cheji
- */
 public class Proyecto_Final {
     public static void main(String[] args) {
         Grafo grafo = new Grafo();
-        Mapa mapa = new Mapa(grafo);
+        Mapa mapa;
         System.out.println("Hello World!");
         Lectura_Archivos.leerArchivo(grafo);
+        grafo.graficar_Auto();
+        mapa = new Mapa(grafo);
         mapa.setLocationRelativeTo(null);
         mapa.setVisible(true);
+        mapa.colocarGrafo();
         grafo.elegir();
         
-        grafo.graficar_Auto();
         //grafo.graficar_Caminando();
         
     }
