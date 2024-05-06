@@ -1,8 +1,9 @@
-package com.mycompany.proyecto_final.Nodos;
+package main.java.com.mycompany.proyecto_final.Nodos;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import main.java.com.mycompany.proyecto_final.Grafos.Ruta;
 
 public class Nodo {
     private String nombre;
@@ -51,4 +52,60 @@ public class Nodo {
     public LinkedList<Nodo> getCaminando(){
         return adyacentes_Caminando;
     }
+    
+    /*public String Buscar(){
+    return "";
+    }*/
+    
+    public void buscarNodo(String destino, LinkedList<Ruta> rutas, LinkedList<Nodo> pasados){
+        
+        Ruta rt = new Ruta(pasados);
+        if(! rt.yaEnlistado(this)){
+            if(nombre.equals(destino)){
+                rutas.add(rt);
+            }else{
+                //Seguir buscando
+                LinkedList<Nodo> nuevosPasados = new LinkedList <>();
+                for (Nodo pasado : pasados) {
+                    nuevosPasados.add(pasado);
+                }
+                nuevosPasados.add(this);
+                
+                for (Nodo adyacente : adyacentes) {
+                    adyacente.buscarNodo(destino, rutas, nuevosPasados);
+                }
+            }
+        }
+        
+    }
+    
+    public int getDistancia(Nodo destino){
+        if (destino != null)  {
+            return distancias.get(destino.getNombre());
+        }
+        return 0;
+    }
+    
+    public int getTiempo(Nodo destino, boolean caminando){
+        if (destino != null) {
+            if (caminando) {
+                return tiempo_caminar.get(destino.getNombre());
+            } else {
+                return tiempo_auto.get(destino.getNombre());
+            }
+        }
+        return 0;
+    }
+    
+    public int getDesgaste(Nodo destino, boolean caminando){
+        if (destino != null) {
+            if (caminando) {
+                return gasto_a_pie.get(destino.getNombre());
+            } else {
+                return gasto_combustible.get(destino.getNombre());
+            }
+        }
+        return 0;
+    }
+    
 }

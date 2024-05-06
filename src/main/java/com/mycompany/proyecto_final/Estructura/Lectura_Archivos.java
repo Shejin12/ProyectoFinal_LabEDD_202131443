@@ -1,7 +1,7 @@
-package com.mycompany.proyecto_final.Estructura;
+package main.java.com.mycompany.proyecto_final.Estructura;
 
-import com.mycompany.proyecto_final.Grafos.Grafo;
-import com.mycompany.proyecto_final.Nodos.Nodo;
+import main.java.com.mycompany.proyecto_final.Nodos.Nodo;
+import main.java.com.mycompany.proyecto_final.Grafos.Grafo;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;

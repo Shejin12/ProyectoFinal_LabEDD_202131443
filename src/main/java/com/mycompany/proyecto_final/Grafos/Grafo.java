@@ -1,13 +1,15 @@
-package com.mycompany.proyecto_final.Grafos;
+package main.java.com.mycompany.proyecto_final.Grafos;
 
-import com.mycompany.proyecto_final.Nodos.Nodo;
+import main.java.com.mycompany.proyecto_final.Nodos.Nodo;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.Scanner;
 
 public class Grafo {
     LinkedList<Nodo> nodos = new LinkedList<>();
+    LinkedList<Ruta> ruta;
     
     
     
@@ -65,7 +67,7 @@ public class Grafo {
     }
     
     private void guardar(String texto){
-        System.out.println(texto);
+        //System.out.println(texto);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("./Grafo.dot"))) {
             writer.write(texto);
         } catch (IOException e) {
@@ -115,5 +117,37 @@ public class Grafo {
         guardar(codigoG);
         graficar();
     }
+    
+    public void elegir(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("1");
+        String origen = scanner.nextLine();
+        System.out.println("2");
+        String destino = scanner.nextLine();
+        busquedaRuta(origen, destino);
+    }
+    
+    public void busquedaRuta(String origen, String destino){
+        
+        Nodo start = findNodo(origen);
+        if (start != null) {
+            ruta = new LinkedList<>();
+            LinkedList<Nodo> pasados = new LinkedList<>();
+            start.buscarNodo(destino, ruta, pasados);
+        }
+        for (Ruta nodo : ruta) {
+            nodo.imprimirRuta();
+        }
+    }
+    
+    public LinkedList<Ruta> getRuta(){
+        return ruta;
+    }
+    
+    public LinkedList<Nodo> getNodos(){
+        return nodos;
+    }
+    
+    
     
 }
