@@ -10,6 +10,7 @@ import java.util.Scanner;
 public class Grafo {
     LinkedList<Nodo> nodos = new LinkedList<>();
     LinkedList<Ruta> ruta;
+    LinkedList<Nodo> pasados = new LinkedList<>();
     private String rutaString = ""; 
     private int distanciaTotal = 0;
     private int tiempoTotal = 0;
@@ -30,6 +31,7 @@ public class Grafo {
             Nodo siguiente = findNodo(destino);
             if (siguiente != null) {
                 start.ingresarDatos(siguiente, dist, gas, cans, timeA, timeC);
+                start.ingresarAdyacenteCaminando(siguiente, dist, cans, timeC);
                 siguiente.ingresarAdyacenteCaminando(start, dist, cans, timeC);
             }
         }
@@ -51,15 +53,20 @@ public class Grafo {
         return null;
     }
     
-    public void graficar_Auto(){
+    public void graficar_Auto(Nodo actual){
         String codigoG = "digraph G{\n";
-        
         for (Nodo nodo : nodos) {
             if(nodo != null){
-                LinkedList<Nodo> ady = nodo.getAdyacentes();
+                LinkedList<Nodo> ady = nodo.getAdyacentes(false);
                 for (Nodo nodo1 : ady) {
                     if(nodo1 != null){
                         codigoG += nodo.getNombre()+ " -> " + nodo1.getNombre() + ";\n";
+                    }
+                }
+                if (actual != null) {
+                    pasados.add(actual);
+                    for (Nodo pasado : pasados) {
+                        codigoG += pasado.getNombre() + "[color = orange]; \n";
                     }
                 }
             }
@@ -87,7 +94,7 @@ public class Grafo {
             Process proceso = procesoBuilder.start();
             proceso.waitFor();
 
-            System.out.println("Proceso completado");
+            //System.out.println("Proceso completado");
         } catch (IOException | InterruptedException e) {
             System.err.println("Error al ejecutar el proceso: " + e.getMessage());
         }
@@ -106,7 +113,7 @@ public class Grafo {
                     }
                 }
                 
-                LinkedList<Nodo> ady = nodo.getAdyacentes();
+                LinkedList<Nodo> ady = nodo.getAdyacentes(true);
                 for (Nodo nodo1 : ady) {
                     if(nodo1 != null){
                         codigoG += nodo.getNombre()+ " -> " + nodo1.getNombre() + ";\n";
@@ -120,6 +127,10 @@ public class Grafo {
         codigoG += "}";
         guardar(codigoG);
         graficar();
+    }
+    
+    public void vaciarPasados(){
+        pasados.clear();
     }
     
     public void elegir(){
@@ -137,7 +148,7 @@ public class Grafo {
         if (start != null) {
             ruta = new LinkedList<>();
             LinkedList<Nodo> pasados = new LinkedList<>();
-            start.buscarNodo(destino, ruta, pasados);
+            start.buscarNodo(destino, ruta, pasados, caminar);
         }
         for (Ruta nodo : ruta) {
             nodo.imprimirRuta(this, caminar);

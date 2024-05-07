@@ -45,8 +45,12 @@ public class Nodo {
         }
     }
     
-    public LinkedList<Nodo> getAdyacentes(){
-        return adyacentes;
+    public LinkedList<Nodo> getAdyacentes(boolean caminar){
+        if (caminar) {
+            return adyacentes_Caminando;
+        } else {
+            return adyacentes;
+        }
     }
     
     public LinkedList<Nodo> getCaminando(){
@@ -57,7 +61,7 @@ public class Nodo {
     return "";
     }*/
     
-    public void buscarNodo(String destino, LinkedList<Ruta> rutas, LinkedList<Nodo> pasados){
+    public void buscarNodo(String destino, LinkedList<Ruta> rutas, LinkedList<Nodo> pasados, boolean caminar){
         
         Ruta rt = new Ruta(pasados);
         if(! rt.yaEnlistado(this)){
@@ -71,8 +75,14 @@ public class Nodo {
                 }
                 nuevosPasados.add(this);
                 
-                for (Nodo adyacente : adyacentes) {
-                    adyacente.buscarNodo(destino, rutas, nuevosPasados);
+                if (caminar) {
+                    for (Nodo adyacente : adyacentes_Caminando) {
+                        adyacente.buscarNodo(destino, rutas, nuevosPasados, caminar);
+                    }
+                } else {
+                    for (Nodo adyacente : adyacentes) {
+                    adyacente.buscarNodo(destino, rutas, nuevosPasados, caminar);
+                }
                 }
             }
         }

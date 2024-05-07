@@ -39,7 +39,17 @@ public class Ruta {
     public void imprimirRuta(Grafo grafo, boolean caminar){
         agregarDatosRuta(caminar);
         grafo.colocarDatos(distanciaTotal, tiempoTotal, gastoTotal);
+        System.out.println(rutaString);
+        System.out.println(distanciaTotal);
+        System.out.println(tiempoTotal);
+        System.out.println(gastoTotal);
     }
+    
+    public String getRutaString(){
+        return rutaString;
+    }
+    
+    
     
     private void agregarDatosRuta(boolean caminar){
         Nodo actual;
@@ -54,5 +64,15 @@ public class Ruta {
         }    
     }
     
+    public int getDistancia(){
+        return distanciaTotal;
+    }
     
+    public int getTiempo(){
+        return tiempoTotal;
+    }
+    
+    public int getGasto(){
+        return gastoTotal;
+    }
 }

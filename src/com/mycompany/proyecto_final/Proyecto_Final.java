@@ -15,14 +15,13 @@ public class Proyecto_Final {
         Mapa mapa;
         System.out.println("Hello World!");
         Lectura_Archivos.leerArchivo(grafo);
-        grafo.graficar_Auto();
+        grafo.graficar_Auto(null);
         mapa = new Mapa(grafo);
         mapa.setLocationRelativeTo(null);
         mapa.setVisible(true);
-        mapa.colocarGrafo();
-        grafo.elegir();
-        
         //grafo.graficar_Caminando();
+        mapa.colocarGrafo();
+        
         
     }
 }
