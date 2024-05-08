@@ -1,9 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package main.java.com.mycompany.proyecto_final.Estructura;
 
+import java.awt.Font;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import main.java.com.mycompany.proyecto_final.Grafos.Grafo;
@@ -19,7 +17,8 @@ public class Datos extends javax.swing.JFrame {
 
     public void mostrarDatos(Grafo grafo){
         DefaultTableModel modelo = (DefaultTableModel) tblDatos.getModel();
-        modelo.setRowCount(grafo.getRuta().size());
+        int filas = grafo.getRuta().size() + 8;
+        modelo.setRowCount(filas);
         int cont = 0;
         for (Ruta ruta : grafo.getRuta()) {
             modelo.setValueAt(ruta.getRutaString(), cont, 0);
@@ -28,9 +27,79 @@ public class Datos extends javax.swing.JFrame {
             modelo.setValueAt(ruta.getTiempo(), cont, 3);
             cont++;
         }
+        modelo.setValueAt("", cont, 0);
+        cont++;
+        
+        Ruta mejorRutaDistancia = null;
+        int distancia = 0; 
+        Ruta mejorRutaTiempo = null; 
+        int tiempo = 0; 
+        Ruta mejorRutaGasto = null;
+        int gasto = 0;
+        
+        
+        for (int i = 0; i < grafo.getRuta().size(); i++) {
+            Ruta actual = grafo.getRuta().get(i);
+            if(i == 0){
+                mejorRutaDistancia = actual;
+                distancia = actual.getDistancia();
+                mejorRutaTiempo = actual;
+                tiempo = actual.getTiempo();
+                mejorRutaGasto = actual;
+                tiempo = actual.getGasto();
+            }else{
+               if(actual.getDistancia() < distancia){
+                   distancia = actual.getDistancia();
+                   mejorRutaDistancia = actual;
+               } 
+               
+               if(actual.getTiempo() < tiempo){
+                   distancia = actual.getTiempo();
+                   mejorRutaTiempo = actual;
+               }
+               
+               if(actual.getGasto() < gasto){
+                   gasto = actual.getGasto();
+                   mejorRutaGasto = actual;
+               }
+            }
+        }
+        
+        DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+        renderer.setFont(new Font("Arial", Font.BOLD, 12));
+
+        
+        modelo.setValueAt("Mejor Ruta Distancia", cont, 0);
+        cont++;
+        modelo.setValueAt(mejorRutaDistancia.getRutaString(), cont, 0);
+        modelo.setValueAt(mejorRutaDistancia.getDistancia(), cont, 1);
+        modelo.setValueAt(mejorRutaDistancia.getGasto(), cont, 2);
+        modelo.setValueAt(mejorRutaDistancia.getTiempo(), cont, 3);
+        cont++;
+        
+        modelo.setValueAt("Mejor Ruta Gasolina", cont, 0);
+        cont++;
+        modelo.setValueAt(mejorRutaGasto.getRutaString(), cont, 0);
+        modelo.setValueAt(mejorRutaGasto.getDistancia(), cont, 1);
+        modelo.setValueAt(mejorRutaGasto.getGasto(), cont, 2);
+        modelo.setValueAt(mejorRutaGasto.getTiempo(), cont, 3);
+        cont++;
+        
+        modelo.setValueAt("Mejor Ruta Tiempo", cont, 0);
+        cont++;
+        modelo.setValueAt(mejorRutaTiempo.getRutaString(), cont, 0);
+        modelo.setValueAt(mejorRutaTiempo.getDistancia(), cont, 1);
+        modelo.setValueAt(mejorRutaTiempo.getGasto(), cont, 2);
+        modelo.setValueAt(mejorRutaTiempo.getTiempo(), cont, 3);
+        cont++;
+        
         
     }
     
+    
+    public void actualizarRecorrido(String recorrido){
+        txtRecorrido.setText(recorrido);
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -48,6 +117,9 @@ public class Datos extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDatos = new javax.swing.JTable();
         btnRegresar = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        txtRecorrido = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Datos");
@@ -60,9 +132,9 @@ public class Datos extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Times New Roman", 3, 36)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("DATOS DE LAS RUTAS");
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 400, 60));
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 520, 60));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, 420, 60));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, 540, 60));
 
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -88,15 +160,17 @@ public class Datos extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tblDatos);
         if (tblDatos.getColumnModel().getColumnCount() > 0) {
-            tblDatos.getColumnModel().getColumn(0).setResizable(false);
             tblDatos.getColumnModel().getColumn(1).setResizable(false);
+            tblDatos.getColumnModel().getColumn(1).setPreferredWidth(30);
             tblDatos.getColumnModel().getColumn(2).setResizable(false);
+            tblDatos.getColumnModel().getColumn(2).setPreferredWidth(15);
             tblDatos.getColumnModel().getColumn(3).setResizable(false);
+            tblDatos.getColumnModel().getColumn(3).setPreferredWidth(30);
         }
 
-        jPanel3.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 420, 230));
+        jPanel3.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 540, 190));
 
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, 420, 230));
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, 540, 190));
 
         btnRegresar.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         btnRegresar.setText("Regresar");
@@ -105,17 +179,45 @@ public class Datos extends javax.swing.JFrame {
                 btnRegresarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnRegresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 330, 80, -1));
+        jPanel1.add(btnRegresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 330, 80, -1));
+
+        jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("RECORRIDO HECHO");
+
+        txtRecorrido.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(txtRecorrido)
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtRecorrido, javax.swing.GroupLayout.DEFAULT_SIZE, 67, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 290, 310, 100));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
         );
 
         pack();
@@ -134,10 +236,13 @@ public class Datos extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegresar;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblDatos;
+    private javax.swing.JTextField txtRecorrido;
     // End of variables declaration//GEN-END:variables
 }

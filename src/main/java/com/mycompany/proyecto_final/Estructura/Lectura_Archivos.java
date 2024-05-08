@@ -48,10 +48,5 @@ public class Lectura_Archivos {
             System.out.println("Error al leer el archivo: " + e.getMessage());
         }
     }
-        
-   
-    
-    
-    
-   
+       
 }

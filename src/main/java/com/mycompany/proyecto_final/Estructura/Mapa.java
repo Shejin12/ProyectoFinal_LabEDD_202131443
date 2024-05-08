@@ -24,7 +24,7 @@ import main.java.com.mycompany.proyecto_final.Nodos.Nodo;
 
 public class Mapa extends javax.swing.JFrame {
     private Grafo grafo;
-    private String destino, inicio;
+    private String destino, inicio, recorrido = "";
     private LinkedList<Nodo> lista;
     private int minutosAcumuladoos = 0, minutos = 0;
     boolean ca = false;
@@ -79,7 +79,7 @@ public class Mapa extends javax.swing.JFrame {
     }
     
     public void colocarOtroGrafo(){
-        Icon imagen = new ImageIcon("./Grafo.png");
+        Icon imagen = new ImageIcon("./Linux.jpg");
         lblImagen.setIcon(imagen);
     }
 
@@ -280,7 +280,7 @@ public class Mapa extends javax.swing.JFrame {
         jPanel1.add(btnDatos, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 460, 90, -1));
 
         jButton4.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-        jButton4.setText("Siguiente");
+        jButton4.setText("Cambio");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
@@ -334,6 +334,7 @@ public class Mapa extends javax.swing.JFrame {
 
     private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
         Nodo actual = grafo.findNodo(inicio);
+        String vigente = inicio;
         inicio = cmbSiguiente.getSelectedItem().toString();
         boolean caminar;
         if (cmbTransporte.getSelectedIndex() == 0) {
@@ -349,10 +350,13 @@ public class Mapa extends javax.swing.JFrame {
         actualzarAdyacentes(caminar);
         System.out.println(inicio + "||" + destino);
         if (inicio.equals(destino)) {
-            JOptionPane.showMessageDialog(null, "Llego");
+            JOptionPane.showMessageDialog(null, "Llego a su Destino");
             btnSiguiente.setEnabled(false);
+            recorrido += vigente;
+        } else {
+            recorrido += vigente + ", ";
         }
-        cmbSiguiente.setSelectedIndex(0);
+        datos.actualizarRecorrido(recorrido);
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
