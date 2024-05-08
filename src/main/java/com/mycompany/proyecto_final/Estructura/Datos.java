@@ -28,6 +28,9 @@ public class Datos extends javax.swing.JFrame {
             cont++;
         }
         modelo.setValueAt("", cont, 0);
+        modelo.setValueAt("", cont, 1);
+        modelo.setValueAt("", cont, 2);
+        modelo.setValueAt("", cont, 3);
         cont++;
         
         Ruta mejorRutaDistancia = null;
@@ -46,7 +49,7 @@ public class Datos extends javax.swing.JFrame {
                 mejorRutaTiempo = actual;
                 tiempo = actual.getTiempo();
                 mejorRutaGasto = actual;
-                tiempo = actual.getGasto();
+                gasto = actual.getGasto();
             }else{
                if(actual.getDistancia() < distancia){
                    distancia = actual.getDistancia();
@@ -54,7 +57,7 @@ public class Datos extends javax.swing.JFrame {
                } 
                
                if(actual.getTiempo() < tiempo){
-                   distancia = actual.getTiempo();
+                   tiempo = actual.getTiempo();
                    mejorRutaTiempo = actual;
                }
                
@@ -70,6 +73,9 @@ public class Datos extends javax.swing.JFrame {
 
         
         modelo.setValueAt("Mejor Ruta Distancia", cont, 0);
+        modelo.setValueAt("", cont, 1);
+        modelo.setValueAt("", cont, 2);
+        modelo.setValueAt("", cont, 3);
         cont++;
         modelo.setValueAt(mejorRutaDistancia.getRutaString(), cont, 0);
         modelo.setValueAt(mejorRutaDistancia.getDistancia(), cont, 1);
@@ -78,6 +84,9 @@ public class Datos extends javax.swing.JFrame {
         cont++;
         
         modelo.setValueAt("Mejor Ruta Gasolina", cont, 0);
+        modelo.setValueAt("", cont, 1);
+        modelo.setValueAt("", cont, 2);
+        modelo.setValueAt("", cont, 3);
         cont++;
         modelo.setValueAt(mejorRutaGasto.getRutaString(), cont, 0);
         modelo.setValueAt(mejorRutaGasto.getDistancia(), cont, 1);
@@ -86,6 +95,9 @@ public class Datos extends javax.swing.JFrame {
         cont++;
         
         modelo.setValueAt("Mejor Ruta Tiempo", cont, 0);
+        modelo.setValueAt("", cont, 1);
+        modelo.setValueAt("", cont, 2);
+        modelo.setValueAt("", cont, 3);
         cont++;
         modelo.setValueAt(mejorRutaTiempo.getRutaString(), cont, 0);
         modelo.setValueAt(mejorRutaTiempo.getDistancia(), cont, 1);
@@ -179,7 +191,7 @@ public class Datos extends javax.swing.JFrame {
                 btnRegresarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnRegresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 330, 80, -1));
+        jPanel1.add(btnRegresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 330, 120, -1));
 
         jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);

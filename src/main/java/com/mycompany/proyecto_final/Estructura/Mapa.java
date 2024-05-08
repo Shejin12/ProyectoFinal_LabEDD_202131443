@@ -194,6 +194,11 @@ public class Mapa extends javax.swing.JFrame {
         btnReinicio.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         btnReinicio.setText("Reiniciar");
         btnReinicio.setEnabled(false);
+        btnReinicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReinicioActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnReinicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 460, 90, -1));
         jPanel1.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 300, 10));
 
@@ -323,6 +328,7 @@ public class Mapa extends javax.swing.JFrame {
         stats();
         cmbSiguiente.setEnabled(true);
         btnSiguiente.setEnabled(true);
+        btnInicio.setEnabled(false);
         lblActual.setText(inicio);
         cmbFinish.setEnabled(false);
         cmbStart.setEnabled(false);
@@ -352,7 +358,8 @@ public class Mapa extends javax.swing.JFrame {
         if (inicio.equals(destino)) {
             JOptionPane.showMessageDialog(null, "Llego a su Destino");
             btnSiguiente.setEnabled(false);
-            recorrido += vigente;
+            btnReinicio.setEnabled(true);
+            recorrido += vigente + "," + destino;
         } else {
             recorrido += vigente + ", ";
         }
@@ -374,6 +381,17 @@ public class Mapa extends javax.swing.JFrame {
         this.setVisible(false);
         datos.mostrarDatos(grafo);
     }//GEN-LAST:event_btnDatosActionPerformed
+
+    private void btnReinicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReinicioActionPerformed
+        recorrido = "";
+        datos.actualizarRecorrido(recorrido);
+        cmbSiguiente.setEnabled(false);
+        cmbStart.setEnabled(true);
+        cmbFinish.setEnabled(true);
+        cmbTransporte.setEnabled(true);
+        btnInicio.setEnabled(true);
+        
+    }//GEN-LAST:event_btnReinicioActionPerformed
 
     /**
      * @param args the command line arguments
